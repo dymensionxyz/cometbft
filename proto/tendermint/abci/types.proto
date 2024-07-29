@@ -380,8 +380,8 @@ message Evidence {
 }
 
 message RollappConsensusParams {
-  string da = 1 [(gogoproto.nullable) = false];;
-  string version = 2 [(gogoproto.nullable) = false];;
+  string da = 1 ;
+  string version = 2 ;
 }
 //----------------------------------------
 // State Sync Types
