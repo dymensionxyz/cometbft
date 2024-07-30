@@ -37,13 +37,14 @@ type GenesisValidator struct {
 
 // GenesisDoc defines the initial conditions for a CometBFT blockchain, in particular its validator set.
 type GenesisDoc struct {
-	GenesisTime     time.Time                 `json:"genesis_time"`
-	ChainID         string                    `json:"chain_id"`
-	InitialHeight   int64                     `json:"initial_height"`
-	ConsensusParams *cmtproto.ConsensusParams `json:"consensus_params,omitempty"`
-	Validators      []GenesisValidator        `json:"validators,omitempty"`
-	AppHash         cmtbytes.HexBytes         `json:"app_hash"`
-	AppState        json.RawMessage           `json:"app_state,omitempty"`
+	GenesisTime            time.Time                        `json:"genesis_time"`
+	ChainID                string                           `json:"chain_id"`
+	InitialHeight          int64                            `json:"initial_height"`
+	ConsensusParams        *cmtproto.ConsensusParams        `json:"consensus_params,omitempty"`
+	RollappConsensusParams *cmtproto.RollappConsensusParams `json:"rollapp_params,omitempty"`
+	Validators             []GenesisValidator               `json:"validators,omitempty"`
+	AppHash                cmtbytes.HexBytes                `json:"app_hash"`
+	AppState               json.RawMessage                  `json:"app_state,omitempty"`
 }
 
 // SaveAs is a utility method for saving GenensisDoc as a JSON file.
@@ -103,6 +104,15 @@ func (genDoc *GenesisDoc) ValidateAndComplete() error {
 		genDoc.GenesisTime = cmttime.Now()
 	}
 
+	var objmap map[string]json.RawMessage
+	err := json.Unmarshal(genDoc.AppState, &objmap)
+	if err != nil {
+		return err
+	}
+	params, ok := objmap["rollapp_params"]
+	if ok {
+		json.Unmarshal(params, &genDoc.RollappConsensusParams)
+	}
 	return nil
 }
 
