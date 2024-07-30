@@ -104,15 +104,6 @@ func (genDoc *GenesisDoc) ValidateAndComplete() error {
 		genDoc.GenesisTime = cmttime.Now()
 	}
 
-	var objmap map[string]json.RawMessage
-	err := json.Unmarshal(genDoc.AppState, &objmap)
-	if err != nil {
-		return err
-	}
-	params, ok := objmap["rollapp_params"]
-	if ok {
-		json.Unmarshal(params, &genDoc.RollappConsensusParams)
-	}
 	return nil
 }
 
