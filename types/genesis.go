@@ -37,14 +37,13 @@ type GenesisValidator struct {
 
 // GenesisDoc defines the initial conditions for a CometBFT blockchain, in particular its validator set.
 type GenesisDoc struct {
-	GenesisTime            time.Time                        `json:"genesis_time"`
-	ChainID                string                           `json:"chain_id"`
-	InitialHeight          int64                            `json:"initial_height"`
-	ConsensusParams        *cmtproto.ConsensusParams        `json:"consensus_params,omitempty"`
-	RollappConsensusParams *cmtproto.RollappConsensusParams `json:"rollapp_params,omitempty"`
-	Validators             []GenesisValidator               `json:"validators,omitempty"`
-	AppHash                cmtbytes.HexBytes                `json:"app_hash"`
-	AppState               json.RawMessage                  `json:"app_state,omitempty"`
+	GenesisTime     time.Time                 `json:"genesis_time"`
+	ChainID         string                    `json:"chain_id"`
+	InitialHeight   int64                     `json:"initial_height"`
+	ConsensusParams *cmtproto.ConsensusParams `json:"consensus_params,omitempty"`
+	Validators      []GenesisValidator        `json:"validators,omitempty"`
+	AppHash         cmtbytes.HexBytes         `json:"app_hash"`
+	AppState        json.RawMessage           `json:"app_state,omitempty"`
 }
 
 // SaveAs is a utility method for saving GenensisDoc as a JSON file.

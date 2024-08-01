@@ -80,10 +80,10 @@ message HashedParams {
 }
 
 message RollappConsensusParams {
-  Params params = 1;
+  Params params = 1 [(gogoproto.nullable) = false];
 }
 
 message Params {
   string da = 1 ;
-  string version = 2 ;
+  string commit = 2 ;
 }
