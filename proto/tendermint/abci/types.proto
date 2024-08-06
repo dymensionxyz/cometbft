@@ -181,6 +181,7 @@ message ResponseInitChain {
   ConsensusParams          consensus_params = 1;
   repeated ValidatorUpdate validators       = 2 [(gogoproto.nullable) = false];
   bytes                    app_hash         = 3;
+  RollappConsensusParams   rollapp_consensus_params = 4;
 }
 
 message ResponseQuery {
@@ -380,8 +381,9 @@ message Evidence {
 }
 
 message RollappConsensusParams {
-  string da = 1 ;
-  string commit = 2 ;
+  BlockParams block = 1;
+  string da = 2 ;
+  string commit = 3;
 }
 //----------------------------------------
 // State Sync Types

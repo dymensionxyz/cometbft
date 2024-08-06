@@ -84,6 +84,7 @@ message RollappConsensusParams {
 }
 
 message Params {
-  string da = 1 ;
-  string commit = 2 ;
+  BlockParams block = 1;
+  string da = 2 ;
+  string commit = 3 ;
 }
