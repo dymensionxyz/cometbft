@@ -396,7 +396,7 @@ message Evidence {
 
 message RollappParams {
   string da = 1 ;
-  uint64 version = 2;
+  uint64 drs_version = 2;
 }
 
 //----------------------------------------
