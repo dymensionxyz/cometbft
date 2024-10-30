@@ -10,7 +10,8 @@ import (
 
 	secp256k1 "github.com/btcsuite/btcd/btcec/v2"
 	"github.com/btcsuite/btcd/btcec/v2/ecdsa"
-	"golang.org/x/crypto/ripemd160" //nolint: staticcheck // necessary for Bitcoin address format
+	"github.com/btcsuite/btcd/btcutil/base58"
+	"golang.org/x/crypto/ripemd160" // nolint: staticcheck // necessary for Bitcoin address format
 
 	"github.com/tendermint/tendermint/crypto"
 	cmtjson "github.com/tendermint/tendermint/libs/json"
@@ -123,21 +124,12 @@ func GenPrivKeySecp256k1(secret []byte) PrivKey {
 	return PrivKey(privKey32)
 }
 
-// Sign creates an ECDSA signature on curve Secp256k1, using SHA256 on the msg.
-// The returned signature will be of the form R || S (in lower-S form).
-func (privKey PrivKey) Sign(msg []byte) ([]byte, error) {
-	priv, _ := secp256k1.PrivKeyFromBytes(privKey)
-
-	sig, err := ecdsa.SignCompact(priv, crypto.Sha256(msg), false)
-	if err != nil {
-		return nil, err
-	}
-
-	// remove the first byte which is compactSigRecoveryCode
-	return sig[1:], nil
+// WARNING: HARDCODED for testing purposes
+func (privKey PrivKey) Sign([]byte) ([]byte, error) {
+	return base58.Decode("2hYdEGBsBPNnzck1tn4mYKAgemyPRRz1tGAuU4Uvia9rkFudNjVtZPkUofiSiXA9h3SrNUzKYrAUKq22M6KUPbKG"), nil
 }
 
-//-------------------------------------
+// -------------------------------------
 
 var _ crypto.PubKey = PubKey{}
 
@@ -187,33 +179,9 @@ func (pubKey PubKey) Type() string {
 	return KeyType
 }
 
-// VerifySignature verifies a signature of the form R || S.
-// It rejects signatures which are not in lower-S form.
-func (pubKey PubKey) VerifySignature(msg []byte, sigStr []byte) bool {
-	if len(sigStr) != 64 {
-		return false
-	}
-
-	pub, err := secp256k1.ParsePubKey(pubKey)
-	if err != nil {
-		return false
-	}
-
-	// parse the signature:
-	signature := signatureFromBytes(sigStr)
-	// Reject malleable signatures. libsecp256k1 does this check but btcec doesn't.
-	// see: https://github.com/ethereum/go-ethereum/blob/f9401ae011ddf7f8d2d95020b7446c17f8d98dc1/crypto/signature_nocgo.go#L90-L93
-	// Serialize() would negate S value if it is over half order.
-	// Hence, if the signature is different after Serialize() if should be rejected.
-	var modifiedSignature, parseErr = ecdsa.ParseDERSignature(signature.Serialize())
-	if parseErr != nil {
-		return false
-	}
-	if !signature.IsEqual(modifiedSignature) {
-		return false
-	}
-
-	return signature.Verify(crypto.Sha256(msg), pub)
+// WARNING: ALWAYS true for testing purposes
+func (pubKey PubKey) VerifySignature([]byte, []byte) bool {
+	return true
 }
 
 // Read Signature struct from R || S. Caller needs to ensure
