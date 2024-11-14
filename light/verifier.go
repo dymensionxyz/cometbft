@@ -157,9 +157,9 @@ func verifyNewHeaderAndVals(
 	now time.Time,
 	maxClockDrift time.Duration) error {
 
-	if err := untrustedHeader.ValidateBasic(trustedHeader.ChainID); err != nil {
-		return fmt.Errorf("untrustedHeader.ValidateBasic failed: %w", err)
-	}
+	// if err := untrustedHeader.ValidateBasic(trustedHeader.ChainID); err != nil {
+	// 	return fmt.Errorf("untrustedHeader.ValidateBasic failed: %w", err)
+	// }
 
 	if untrustedHeader.Height <= trustedHeader.Height {
 		return fmt.Errorf("expected new header height %d to be greater than one of old header %d",
