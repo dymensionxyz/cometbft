@@ -161,24 +161,24 @@ func verifyNewHeaderAndVals(
 	// 	return fmt.Errorf("untrustedHeader.ValidateBasic failed: %w", err)
 	// }
 
-	if untrustedHeader.Height <= trustedHeader.Height {
-		return fmt.Errorf("expected new header height %d to be greater than one of old header %d",
-			untrustedHeader.Height,
-			trustedHeader.Height)
-	}
+	// if untrustedHeader.Height <= trustedHeader.Height {
+	// 	return fmt.Errorf("expected new header height %d to be greater than one of old header %d",
+	// 		untrustedHeader.Height,
+	// 		trustedHeader.Height)
+	// }
 
-	if !untrustedHeader.Time.After(trustedHeader.Time) {
-		return fmt.Errorf("expected new header time %v to be after old header time %v",
-			untrustedHeader.Time,
-			trustedHeader.Time)
-	}
+	// if !untrustedHeader.Time.After(trustedHeader.Time) {
+	// 	return fmt.Errorf("expected new header time %v to be after old header time %v",
+	// 		untrustedHeader.Time,
+	// 		trustedHeader.Time)
+	// }
 
-	if !untrustedHeader.Time.Before(now.Add(maxClockDrift)) {
-		return fmt.Errorf("new header has a time from the future %v (now: %v; max clock drift: %v)",
-			untrustedHeader.Time,
-			now,
-			maxClockDrift)
-	}
+	// if !untrustedHeader.Time.Before(now.Add(maxClockDrift)) {
+	// 	return fmt.Errorf("new header has a time from the future %v (now: %v; max clock drift: %v)",
+	// 		untrustedHeader.Time,
+	// 		now,
+	// 		maxClockDrift)
+	// }
 
 	if !bytes.Equal(untrustedHeader.ValidatorsHash, untrustedVals.Hash()) {
 		return fmt.Errorf("expected new header validators (%X) to match those that were supplied (%X) at height %d",
