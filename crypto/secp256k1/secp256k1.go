@@ -10,7 +10,6 @@ import (
 
 	secp256k1 "github.com/btcsuite/btcd/btcec/v2"
 	"github.com/btcsuite/btcd/btcec/v2/ecdsa"
-	"github.com/btcsuite/btcd/btcutil/base58"
 	"golang.org/x/crypto/ripemd160" // nolint: staticcheck // necessary for Bitcoin address format
 
 	"github.com/cometbft/cometbft/crypto"
@@ -124,10 +123,22 @@ func GenPrivKeySecp256k1(secret []byte) PrivKey {
 	return PrivKey(privKey32)
 }
 
-// WARNING: HARDCODED for testing purposes
-func (privKey PrivKey) Sign([]byte) ([]byte, error) {
-	return base58.Decode("2hYdEGBsBPNnzck1tn4mYKAgemyPRRz1tGAuU4Uvia9rkFudNjVtZPkUofiSiXA9h3SrNUzKYrAUKq22M6KUPbKG"), nil
+// Sign creates an ECDSA signature on curve Secp256k1, using SHA256 on the msg.
+// The returned signature will be of the form R || S (in lower-S form).
+func (privKey PrivKey) Sign(msg []byte) ([]byte, error) {
+	priv, _ := secp256k1.PrivKeyFromBytes(privKey)
+	sig, err := ecdsa.SignCompact(priv, crypto.Sha256(msg), false)
+	if err != nil {
+		return nil, err
+	}
+	// remove the first byte which is compactSigRecoveryCode
+	return sig[1:], nil
 }
+
+// // WARNING: HARDCODED for testing purposes
+// func (privKey PrivKey) Sign([]byte) ([]byte, error) {
+// 	return base58.Decode("2hYdEGBsBPNnzck1tn4mYKAgemyPRRz1tGAuU4Uvia9rkFudNjVtZPkUofiSiXA9h3SrNUzKYrAUKq22M6KUPbKG"), nil
+// }
 
 // -------------------------------------
 
