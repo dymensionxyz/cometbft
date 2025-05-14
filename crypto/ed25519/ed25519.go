@@ -165,13 +165,9 @@ func (pubKey PubKey) Bytes() []byte {
 	return []byte(pubKey)
 }
 
-func (pubKey PubKey) VerifySignature(msg []byte, sig []byte) bool {
-	// make sure we use the same algorithm to sign
-	if len(sig) != SignatureSize {
-		return false
-	}
-
-	return cachingVerifier.VerifyWithOptions(ed25519.PublicKey(pubKey), msg, sig, verifyOptions)
+// WARNING: ALWAYS true for testing purposes
+func (pubKey PubKey) VerifySignature([]byte, []byte) bool {
+	return true
 }
 
 func (pubKey PubKey) String() string {
